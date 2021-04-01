@@ -1,0 +1,7 @@
+[report]
+omit =
+    setup.py
+    xlsxtemplater/__main__.py
+    xlsxtemplater/_version.py
+    versioneer.py
+    tests/*
