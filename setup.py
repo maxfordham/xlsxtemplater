@@ -29,6 +29,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
     ],
     description="high-level wrapper that sits on top of xlsxwriter,\
         to template the output of the pandas dataframes to formatted excel tables",
