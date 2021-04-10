@@ -83,28 +83,28 @@ def create_readme(toexcel: ToExcel,transpose_df=True) -> SheetObj:
 def create_sheet_objs(data_object, fpth) -> ToExcel:
     '''
     pass a dataobject and return a ToExcel objects
-    this funtion interprests the user input and tidies into the correct format.
+    this function interprests the user input and tidies into the correct format.
     '''
 
     def default(df, counter):
         di_tmp = {
             'sheet_name': 'Sheet{0}'.format(counter),
-            'xlsx_exporter': df_to_sheet_table,
-            'xlsx_params': None,
+            #'xlsx_exporter': df_to_sheet_table,
+            #'xlsx_params': None,
             'df': df,
         }
         counter += 1
         return di_tmp, counter
-    def add_defaults(di):
-        req = {
-            'xlsx_exporter': df_to_sheet_table,
-            'xlsx_params': None
-        }
-        li = list(req.keys())
-        for l in li:
-            if l not in di.keys():
-                di[l]=req[l]
-        return di
+    #def add_defaults(di):
+    #    req = {
+    #        'xlsx_exporter': df_to_sheet_table,
+    #        'xlsx_params': None
+    #    }
+    #    li = list(req.keys())
+    #    for l in li:
+    #        if l not in di.keys():
+    #            di[l]=req[l]
+    #    return di
 
     def add_notes(di, fpth):
         if 'notes' not in di.keys():
@@ -130,17 +130,17 @@ def create_sheet_objs(data_object, fpth) -> ToExcel:
             elif type(l) == dict:
                 # then export the DataFrame with the exporter defined by the dict
                 l = add_notes(l, fpth)
-                l = add_defaults(l)
+                #l = add_defaults(l)
                 lidi.append(l)
             else:
                 print('you need to pass a list of dataframes or dicts for this function to work')
     if type(data_object) == dict:
         data_object = add_notes(data_object, fpth)
-        data_object = add_defaults(data_object)
+        #data_object = add_defaults(data_object)
 
         lidi.append(data_object)
 
-    sheets = [from_dict(data_class=SheetObj,data=l) for l in lidi]
+    sheets = [from_dict(data_class=SheetObj,data=l) for l in lidi] #  defaults are added here if not previously specified
     toexcel = ToExcel(sheets=sheets)
     return toexcel
 
