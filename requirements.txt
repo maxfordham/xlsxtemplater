@@ -1,6 +1,6 @@
-pandas>=1.0
-xlsxwriter>=1.2
-click>=7.0
-dataclasses>=0.8
+pandas
+xlsxwriter
+click
+dataclasses
 typing
 dacite
