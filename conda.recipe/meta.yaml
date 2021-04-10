@@ -26,15 +26,15 @@ requirements:
   run:
     - python
     - numpy
-    - pandas
-    - click
-    - dataclasses
-    - typing
+    #- pandas
+    #- click
+    #- dataclasses
+    #- typing
     # - dacite
     # dependencies are defined in setup.py
-    # {% for dep in data['install_requires'] %}
-    # - {{ dep.lower() }}
-    # {% endfor %}
+     {% for dep in data['install_requires'] %}
+     - {{ dep.lower() }}
+     {% endfor %}
 
 about:
   home: https://github.com/gunstonej/xlsxtemplater
