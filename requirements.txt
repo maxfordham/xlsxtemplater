@@ -3,4 +3,4 @@ XlsxWriter>=1.2
 click>=7.0
 dataclasses>=0.8
 typing
-dacite
+# dacite

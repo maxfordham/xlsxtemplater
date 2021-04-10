@@ -30,7 +30,7 @@ requirements:
     - click
     - dataclasses
     - typing
-    - dacite
+    # - dacite
     # dependencies are defined in setup.py
     # {% for dep in data['install_requires'] %}
     # - {{ dep.lower() }}
