@@ -1,37 +1,36 @@
-=============
-xlsxtemplater
-=============
+# xlsxtemplater
 
+high-level wrapper that sits on xlsxwriter to template the output of the pandas dataframes to formatted excel tables.
 
-.. image:: https://img.shields.io/pypi/v/xlsxtemplater.svg
-        :target: https://pypi.python.org/pypi/xlsxtemplater
+## build and publish to MF using conda-build
 
-.. image:: https://img.shields.io/travis/gunstonej/xlsxtemplater.svg
-        :target: https://travis-ci.com/gunstonej/xlsxtemplater
+- build locally using wsl
 
-.. image:: https://readthedocs.org/projects/xlsxtemplater/badge/?version=latest
-        :target: https://xlsxtemplater.readthedocs.io/en/latest/?badge=latest
-        :alt: Documentation Status
+```bash
+wsl
+conda activate base_mf
+conda build conda.recipe
+conda build conda.recipe --croot /mnt/c/engDev/channel
+```
 
+- once built check its working, then publish to MF network
+- mount the network location
 
+```bash
+mkdir /mnt/barbados
+sudo mount -t drvfs '\\barbados\apps\conda\conda-bld' /mnt/conda-bld
+```
 
+- copy and paste the linux-64 files `*.tar.bz2` into `\\barbados\apps\conda\conda-bld\linux-64`
+- and convert to all platforms
 
-high-level wrapper that sits on xlsxwriter to template the output of the pandas dataframes to formatted excel tables
+```bash
+conda convert --platform all /mnt/conda-bld/linux-64/xlsxtemplater*.tar.bz2
+conda index /mnt/conda-bld
+```
 
+- install from network channel
 
-* Free software: BSD license
-* Documentation: https://xlsxtemplater.readthedocs.io.
-
-
-Features
---------
-
-* TODO
-
-Credits
--------
-
-This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
-
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+```bash
+conda install -c file:///mnt/conda-bld xlsxtemplater
+```
