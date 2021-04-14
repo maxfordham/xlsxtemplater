@@ -1,49 +1,11 @@
 import pandas as pd
 import os
-import getpass
-import datetime
 import copy
-import re
 import subprocess
-try:
-    from xlsxtemplater.templaterdefs import * # when built
-except:
-    from .templaterdefs import * # dev mode
+from dataclasses import asdict
 
-#  extracted from mf_modules ##################################
-#  from mf_modules.file_operations import open_file
-def open_file(filename):
-    '''Open document with default application in Python.'''
-
-    try:
-        os.startfile(filename)
-    except AttributeError:
-        subprocess.call(['open', filename])
-#  from mf_modules.file_operations import jobno_fromdir
-def jobno_fromdir(fdir):
-    '''
-    returns the job number from a given file directory
-
-    Args:
-        fdir (filepath): file-directory
-    Returns:
-        job associated to file-directory
-    Code:
-        re.findall("[J][0-9][0-9][0-9][0-9]", txt)
-    '''
-    matches = re.findall("[J][0-9][0-9][0-9][0-9]", fdir)
-    if len(matches) == 0:
-        job_no = 'J4321'
-    else:
-        job_no = matches[0]
-    return job_no
-##############################################################
-
-def get_user():
-    return getpass.getuser()
-
-def date():
-    return datetime.datetime.now().strftime('%Y%m%d')
+from templaterdefs import *
+from utils import open_file, jobno_fromdir, get_user, date
 
 def create_meta(fpth):
     di = {}
@@ -144,20 +106,23 @@ def create_sheet_objs(data_object, fpth) -> ToExcel:
     toexcel = ToExcel(sheets=sheets)
     return toexcel
 
-def object_to_excel(toexcel: ToExcel, fpth):
+def object_to_excel(toexcel: ToExcel, fpth: str, file_properties: FileProperties):
     """
     Args:
         toexcel: ToExcel object
         fpth:
+        file_properties: FileProperties object
 
     Returns:
         fpth
     """
     # initiate xlsxwriter
     writer = pd.ExcelWriter(fpth, engine='xlsxwriter')
-
+    workbook = writer.book
     for sheet in toexcel.sheets:
-        sheet.xlsx_exporter(sheet.df, writer, sheet.sheet_name, sheet.xlsx_params)
+        sheet.xlsx_exporter(sheet.df, writer, workbook, sheet.sheet_name, sheet.xlsx_params)
+
+    workbook.set_properties(asdict(file_properties))
 
     # save and close the workbook
     writer.save()
@@ -165,6 +130,7 @@ def object_to_excel(toexcel: ToExcel, fpth):
 
 def to_excel(data_object,
              fpth,
+             file_properties=None,
              openfile=True,
              make_readme=True):
     """
@@ -177,13 +143,15 @@ def to_excel(data_object,
         }
         to_excel(li, fpth, openfile=True,make_readme=True)
     """
-
+    
     toexcel = create_sheet_objs(data_object, fpth)
     if make_readme:
         readme = create_readme(toexcel) # get sheet meta data
         # create metadata to make the readme worksheet
         toexcel.sheets.insert(0, readme)
-    object_to_excel(toexcel, fpth)
+    if file_properties is None:
+        file_properties = FileProperties()
+    object_to_excel(toexcel, fpth, file_properties)
     if openfile:
         open_file(fpth)
     return fpth
@@ -191,8 +159,8 @@ def to_excel(data_object,
 
 if __name__ == '__main__':
     if __debug__ == True:
-        wdir = os.path.join(os.environ['mf_root'],r'MF_Toolbox\dev\examples\xlsx_templater')
-        fpth = wdir + '\\' + 'bsDataDictionary_Psets.xlsx'
+        fdir = os.path.join('test_data')
+        fpth = os.path.join(fdir,'bsDataDictionary_Psets.xlsx')
         df = pd.read_excel(fpth)
         #fpth = wdir + '\\' + 'bsDataDictionary_Psets-processed.xlsx'
         #df1 = pd.read_excel(fpth,sheet_name='1_PropertySets')
@@ -203,6 +171,6 @@ if __name__ == '__main__':
             'df': df,
         }
         li = [di]
-        fpth = wdir + '\\' + 'bsDataDictionary_Psets-out.xlsx'
+        fpth = os.path.join(fdir,'bsDataDictionary_Psets-out.xlsx') 
         to_excel(li, fpth, openfile=True)
-        print('fasdf')
+        print('done')
