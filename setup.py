@@ -33,11 +33,6 @@ setup(
     ],
     description="high-level wrapper that sits on top of xlsxwriter,\
         to template the output of the pandas dataframes to formatted excel tables",
-    entry_points={
-        'console_scripts': [
-            'xlsxtemplater=xlsxtemplater.cli:main',
-        ],
-    },
     install_requires=requirements(),
     license="BSD license",
     long_description=readme(),
