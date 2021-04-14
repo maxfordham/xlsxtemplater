@@ -4,6 +4,13 @@ from dacite import from_dict
 import pandas as pd
 import xlsxwriter as xw
 
+#import xlsxtemplater
+from utils import get_user
+from _version import get_versions
+
+__version__ = get_versions()['version']
+NAME_VERSION = 'xlsxtemplater'+'-{}'.format(__version__)
+
 def load_colours():
     colours = {
         'ifcAqua': '#2da4a8',
@@ -192,8 +199,25 @@ class XlsxTable:
     text_box: List[Textbox] = field(default_factory=list)
     hide_grid: bool = True
 
+@dataclass
+class FileProperties:
+    title: str = None
+    subject: str = None
+    author: str = get_user()
+    manager: str = None
+    company: str = 'Max Fordham'
+    category: str = None
+    keywords: str = ''
+    comments: str = None
+    status: str = None
+
+    def __post_init__(self):
+        self.keywords = self.keywords + ', ' + NAME_VERSION
+
+
 def df_to_sheet_table(df: pd.DataFrame,
                       writer: pd.ExcelWriter,
+                      workbook, 
                       sheet_name,
                       xlsx_params: XlsxTable = XlsxTable(),
                       inject_header_params=None
@@ -227,28 +251,34 @@ def df_to_sheet_table(df: pd.DataFrame,
             another can then compile many sheets in a single output
 
     Code:
-        df.to_excel(writer, sheet_name)
-        workbook = writer.book
+        df.to_excel(writer, sheet_name, index=None)
         worksheet = writer.sheets[sheet_name]
 
-        if hide_grid == True:
+        if xlsx_params.hide_grid == True:
             worksheet.hide_gridlines(2)
 
         # get table range
         end_row = len(df.index)
-        last_column = len(df.columns)
+        last_column = len(df.columns)-1
         cell_range = xw.utility.xl_range(0, 0, end_row, last_column)
 
         # create table
-        df = df.reset_index()  # FIX
-        header = [{'header': col} for col in df.columns.tolist()]            
+        #df = df.reset_index()  # FIX
+        header = [{'header': col} for col in df.columns.tolist()]
+        if inject_header_params is not None:
+            for h in header:
+                col = h['header']
+                if col in inject_header_params.keys():
+                    h.update(inject_header_params[col])
+
         worksheet.add_table(cell_range,
-                            {'style': table_style,
-                             'header_row': True,
-                             'first_column': True,
-                             'columns': header})
+                            {'style': xlsx_params.table_style,
+                            'header_row': True,
+                            'first_column': True,
+                            'columns': header})
 
         # set col formatting
+        #  worksheet.set_column(first_col, last_col, width, cell_format, options)
         for col in xlsx_params.col_formatting:
             cell_format = workbook.add_format(col.cell_format)
             worksheet.set_column(col.first_col, col.last_col, col.width, cell_format, col.options)
@@ -256,21 +286,24 @@ def df_to_sheet_table(df: pd.DataFrame,
         # set row formatting
         for row in xlsx_params.row_formatting:
             cell_format = workbook.add_format(row.cell_format)
-            worksheet.set_column(row.row, row.height, cell_format, row.options)
+            worksheet.set_row(row.row, row.height, cell_format, row.options)
 
         # insert textboxes
         for t in xlsx_params.text_box:
             worksheet.insert_textbox(t.row, t.col, t.text, t.options)
 
+        # insert conditional formatting
+        for c in xlsx_params.conditional_formatting:
+            worksheet.conditional_format(c.range, c.options)
+
         # freeze header row and index
-        if xlsx_params.freeze != None:
+        if xlsx_params.freeze is not None:
             worksheet.freeze_panes(xlsx_params.freeze[0], xlsx_params.freeze[1])
 
         return worksheet
     '''
 
     df.to_excel(writer, sheet_name, index=None)
-    workbook = writer.book
     worksheet = writer.sheets[sheet_name]
 
     if xlsx_params.hide_grid == True:
@@ -485,6 +518,6 @@ def params_ifctemplate():
         'table_style': table_style,
         'hide_grid': True,
     }
-    ParamsIfc = from_dict(data_class=XlsxTable,data=xlsx_params)
+    ParamsIfc = from_dict(data_class=XlsxTable, data=xlsx_params)
     return ParamsIfc
 
