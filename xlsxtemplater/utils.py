@@ -4,12 +4,19 @@ import re
 import getpass
 import datetime
 import re
+import pandas as pd
 
 # mf packages
 try:
     from mf_file_utilities import applauncher_wrapper as aw
 except:
     pass
+
+def get_user():
+    return getpass.getuser()
+
+def date():
+    return datetime.datetime.now().strftime('%Y%m%d')
 
 #  extracted from mf_modules ##################################
 #  from mf_modules.file_operations import open_file
@@ -46,8 +53,35 @@ def jobno_fromdir(fdir):
     return job_no
 ##############################################################
 
-def get_user():
-    return getpass.getuser()
+def xlsxtemplated_check(fpth):
+    from openpyxl import load_workbook
+    wb = load_workbook(fpth)
+    if 'xlsxtemplater' in wb.properties.keywords:
+        return True
+    else:
+        return False
 
-def date():
-    return datetime.datetime.now().strftime('%Y%m%d')
+
+def from_excel(fpth):
+    """
+    reads back in pandas tables that have been output using xlsxtemplater.to_excel
+    Args:
+        fpth(str): xl fpth
+    Returns:
+        li(list): of the format below
+            li = {'sheet_name':'name','description':'dataframe description','df':'pd.DataFrame'}
+    """
+    if not xlsxtemplated_check(fpth):
+        print('{} --> not created by xlsxtemplater'.format(fpth))
+        return None
+    cols = ['sheet_name','description']
+    df_readme = pd.read_excel(fpth,sheet_name='readme')
+    li = []
+    for index, row in df_readme.iterrows():
+        tmp = row.to_dict()
+        tmp['df'] = pd.read_excel(fpth,sheet_name=row.sheet_name)
+        li.append(tmp)
+    return li
+
+
+
