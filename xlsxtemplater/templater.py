@@ -14,7 +14,7 @@ def create_meta(fpth):
     di['Author'] = get_user()
     return di
 
-def create_readme(toexcel: ToExcel,transpose_df=True) -> SheetObj:
+def create_readme(toexcel: ToExcel) -> SheetObj:
     """
     creates a readme dataframe from the metadata in the dataobject definitions
     """
@@ -30,8 +30,6 @@ def create_readme(toexcel: ToExcel,transpose_df=True) -> SheetObj:
 
     li = [notes_from_sheet(sheet) for sheet in toexcel.sheets]
     df = pd.DataFrame.from_records(li).set_index('sheet_name')
-    if transpose_df:
-        df = df.T
     df = df.reset_index()
     di = {
         'sheet_name': 'readme',
@@ -173,4 +171,8 @@ if __name__ == '__main__':
         li = [di]
         fpth = os.path.join(fdir,'bsDataDictionary_Psets-out.xlsx') 
         to_excel(li, fpth, openfile=True)
-        print('done')
+        print('{} --> written to excel'.format(fpth))
+        from utils import from_excel
+        li = from_excel(fpth)
+        if type(li) is not None:
+            print('{} --> read from excel'.format(fpth))
