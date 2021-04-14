@@ -3,9 +3,9 @@ import os
 import copy
 import subprocess
 from dataclasses import asdict
-
-from templaterdefs import *
 from utils import open_file, jobno_fromdir, get_user, date
+from templaterdefs import *
+
 
 def create_meta(fpth):
     di = {}
@@ -170,7 +170,7 @@ if __name__ == '__main__':
         }
         li = [di]
         fpth = os.path.join(fdir,'bsDataDictionary_Psets-out.xlsx') 
-        to_excel(li, fpth, openfile=True)
+        to_excel(li, fpth, openfile=False)
         print('{} --> written to excel'.format(fpth))
         from utils import from_excel
         li = from_excel(fpth)
