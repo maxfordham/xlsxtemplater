@@ -39,6 +39,6 @@ requirements:
 
 about:
   home: https://github.com/gunstonej/xlsxtemplater
-  summary: Short description
+  summary: {{ data.get('description') }}
   license: {{ data.get('license') }}
   license_file: LICENSE
