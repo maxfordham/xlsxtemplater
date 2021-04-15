@@ -39,11 +39,26 @@ conda convert --platform all /mnt/conda-bld/linux-64/xlsxtemplater*.tar.bz2
 conda index /mnt/conda-bld
 ```
 
-- install from network channel
+- install to wsl from network channel
 
 ```bash
 conda config --add channels file:///mnt/conda-bld
 conda install ipyrun
 # or 
 conda install -c file:///mnt/conda-bld xlsxtemplater
+```
+
+- install to windows from network channel
+
+to install conda packages into windows you need to expose the conda channel.
+
+```{cmd}
+:: navigate to Z:\conda\conda-bld
+:: create a python server of the directory on your local host
+Z:\conda\conda-bld> python -m http.server
+:: open a new cmd
+```
+
+```cmd
+mamba install mypackage -c http://localhost:8000/
 ```
