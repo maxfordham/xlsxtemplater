@@ -2,24 +2,34 @@
 
 high-level wrapper that sits on xlsxwriter to template the output of the pandas dataframes to formatted excel tables.
 
-## build and publish to MF using conda-build
 
-- build locally using wsl
+## build 
+
+### mount conda channel
+
+- mount the network location
+
+```bash
+mkdir /mnt/conda-bld
+sudo mount -t drvfs '\\barbados\apps\conda\conda-bld' /mnt/conda-bld
+```
+
+### conda build
 
 ```bash
 wsl
 conda activate base_mf
+# add conda mf conda channel if not already there... check with command below...
+# conda config --show
+# run sh command from root dir of package
 conda build conda.recipe
-conda build conda.recipe --croot /mnt/c/engDev/channel
+
 ```
 
+- note. builds here: `\\wsl$\Ubuntu-20.04\home\gunstonej\miniconda3\envs\base_mf\conda-bld` unless `--croot /mnt/c/engDev/channel` is specified
 - once built check its working, then publish to MF network
-- mount the network location
 
-```bash
-mkdir /mnt/barbados
-sudo mount -t drvfs '\\barbados\apps\conda\conda-bld' /mnt/conda-bld
-```
+### publish to MF
 
 - copy and paste the linux-64 files `*.tar.bz2` into `\\barbados\apps\conda\conda-bld\linux-64`
 - and convert to all platforms
@@ -32,5 +42,8 @@ conda index /mnt/conda-bld
 - install from network channel
 
 ```bash
+conda config --add channels file:///mnt/conda-bld
+conda install ipyrun
+# or 
 conda install -c file:///mnt/conda-bld xlsxtemplater
 ```
