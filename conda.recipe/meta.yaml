@@ -27,7 +27,6 @@ requirements:
     - python
     - numpy
     - pandas
-    - click
     - dataclasses
     - typing
     - dacite

@@ -3,8 +3,8 @@ import os
 import copy
 import subprocess
 from dataclasses import asdict
-from utils import open_file, jobno_fromdir, get_user, date
-from templaterdefs import *
+from xlsxtemplater.utils import open_file, jobno_fromdir, get_user, date
+from xlsxtemplater.templaterdefs import *
 
 
 def create_meta(fpth):

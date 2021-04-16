@@ -5,8 +5,8 @@ import pandas as pd
 import xlsxwriter as xw
 
 #import xlsxtemplater
-from utils import get_user
-from _version import get_versions
+from xlsxtemplater.utils import get_user
+from xlsxtemplater._version import get_versions
 
 __version__ = get_versions()['version']
 NAME_VERSION = 'xlsxtemplater'+'-{}'.format(__version__)
