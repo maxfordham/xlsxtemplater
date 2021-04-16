@@ -4,30 +4,24 @@
 
 
 import unittest
-from click.testing import CliRunner
+import xlsxtemplater
+from xlsxtemplater import from_excel
 
-from xlsxtemplater import xlsxtemplater
-from xlsxtemplater import cli
+class TestStringMethods(unittest.TestCase):
 
+    def test_upper(self):
+        self.assertEqual('foo'.upper(), 'FOO')
 
-class TestXlsxtemplater(unittest.TestCase):
-    """Tests for `xlsxtemplater` package."""
+    def test_isupper(self):
+        self.assertTrue('FOO'.isupper())
+        self.assertFalse('Foo'.isupper())
 
-    def setUp(self):
-        """Set up test fixtures, if any."""
+    def test_split(self):
+        s = 'hello world'
+        self.assertEqual(s.split(), ['hello', 'world'])
+        # check that s.split fails when the separator is not a string
+        with self.assertRaises(TypeError):
+            s.split(2)
 
-    def tearDown(self):
-        """Tear down test fixtures, if any."""
-
-    def test_000_something(self):
-        """Test something."""
-
-    def test_command_line_interface(self):
-        """Test the CLI."""
-        runner = CliRunner()
-        result = runner.invoke(cli.main)
-        assert result.exit_code == 0
-        assert 'xlsxtemplater.cli.main' in result.output
-        help_result = runner.invoke(cli.main, ['--help'])
-        assert help_result.exit_code == 0
-        assert '--help  Show this message and exit.' in help_result.output
+if __name__ == '__main__':
+    unittest.main()
