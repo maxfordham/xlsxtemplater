@@ -56,7 +56,7 @@ def jobno_fromdir(fdir):
 def xlsxtemplated_check(fpth):
     from openpyxl import load_workbook
     wb = load_workbook(fpth)
-    if 'xlsxtemplater' in wb.properties.keywords:
+    if wb.properties.keywords is not None and 'xlsxtemplater' in wb.properties.keywords:
         return True
     else:
         return False
