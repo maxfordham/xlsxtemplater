@@ -43,7 +43,7 @@ conda index /mnt/conda-bld
 
 ```bash
 conda config --add channels file:///mnt/conda-bld
-conda install ipyrun
+conda install xlsxtemplater
 # or 
 conda install -c file:///mnt/conda-bld xlsxtemplater
 ```
