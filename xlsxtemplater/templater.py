@@ -18,7 +18,6 @@ def create_readme(toexcel: ToExcel) -> SheetObj:
     """
     creates a readme dataframe from the metadata in the dataobject definitions
     """
-
     def notes_from_sheet(sheet: SheetObj):
         di = {
             'sheet_name':sheet.sheet_name,
@@ -55,16 +54,6 @@ def create_sheet_objs(data_object, fpth) -> ToExcel:
         }
         counter += 1
         return di_tmp, counter
-    #def add_defaults(di):
-    #    req = {
-    #        'xlsx_exporter': df_to_sheet_table,
-    #        'xlsx_params': None
-    #    }
-    #    li = list(req.keys())
-    #    for l in li:
-    #        if l not in di.keys():
-    #            di[l]=req[l]
-    #    return di
 
     def add_notes(di, fpth):
         if 'notes' not in di.keys():
@@ -96,8 +85,6 @@ def create_sheet_objs(data_object, fpth) -> ToExcel:
                 print('you need to pass a list of dataframes or dicts for this function to work')
     if type(data_object) == dict:
         data_object = add_notes(data_object, fpth)
-        #data_object = add_defaults(data_object)
-
         lidi.append(data_object)
 
     sheets = [from_dict(data_class=SheetObj,data=l) for l in lidi] #  defaults are added here if not previously specified
@@ -119,29 +106,50 @@ def object_to_excel(toexcel: ToExcel, fpth: str, file_properties: FileProperties
     workbook = writer.book
     for sheet in toexcel.sheets:
         sheet.xlsx_exporter(sheet.df, writer, workbook, sheet.sheet_name, sheet.xlsx_params)
-
     workbook.set_properties(asdict(file_properties))
-
     # save and close the workbook
     writer.save()
     return fpth
 
 def to_excel(data_object,
              fpth,
-             file_properties=None,
-             openfile=True,
-             make_readme=True):
+             file_properties=None: FileProperties,
+             openfile=True: bool,
+             make_readme=True: bool) -> str:
     """
+    function to output dataobject (list of dicts of dataframes and associated metadata)
+    to excel in nicely formatted tables. 
+
+    Args:
+        data_object (list of dicts): gets converted to a templaterdefs.ToExcel object, which is a list
+            of templaterdefs.SheetObj's. any dict keys not in SheetObj definition will be ignored. 
+            min required is [{'df':df}]
+        fpth (str filepath): of xlsx output
+        file_properties: FileProperties obj defining metadata
+        openfile: bool
+        make_readme: creates a readme header sheet. default to true. avoid changing unless
+            necessary as it is required for the from_excel command. 
+    
+    Returns:
+        fpth: of output excel file
+
     Example:
-        di = {
-            'sheet_name': 'IfcProductDataTemplate',
-            'xlsx_exporter': sheet_table,
-            'xlsx_params': params_ifctemplate(),
-            'df': df1,
-        }
+        #  a vanilla example
+        df = pd.DataFrame.from_dict({'col1':[0,1],'col2':[1,2]})
+        li = [{
+            'sheet_name': 'df',
+            #'xlsx_exporter': sheet_table, # don't pass xlsx_exporter to get default
+            #'xlsx_params': params_ifctemplate(), # don't pass xlsx_params to get default
+            'df': df,
+            'notes':{
+                'a note': 'a note',
+                'how many notes?':'as many as you like',
+                'what types?':'numbers and strings only',
+                'how are they shown?':'as fields in the readme sheet'
+            }
+        }]
         to_excel(li, fpth, openfile=True,make_readme=True)
     """
-    
     toexcel = create_sheet_objs(data_object, fpth)
     if make_readme:
         readme = create_readme(toexcel) # get sheet meta data
@@ -154,6 +162,7 @@ def to_excel(data_object,
         open_file(fpth)
     return fpth
 
+#  TODO: make to_json function that outputs the same data to a json file.
 
 if __name__ == '__main__':
     if __debug__ == True:

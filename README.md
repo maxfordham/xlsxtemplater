@@ -35,7 +35,7 @@ conda build conda.recipe
 - and convert to all platforms
 
 ```bash
-conda convert --platform all /mnt/conda-bld/linux-64/xlsxtemplater*.tar.bz2
+conda convert --platform all /mnt/conda-bld/linux-64/xlsxtemplater-v0.1.5*.tar.bz2
 conda index /mnt/conda-bld
 ```
 

@@ -6,7 +6,8 @@ import datetime
 import re
 import pandas as pd
 
-# mf packages
+# mf packages 
+# TODO - remove this dedendency if opensource
 try:
     from mf_file_utilities import applauncher_wrapper as aw
 except:
