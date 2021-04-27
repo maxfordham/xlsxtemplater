@@ -199,6 +199,10 @@ class XlsxTable:
     text_box: List[Textbox] = field(default_factory=list)
     hide_grid: bool = True
 
+    def __post_init__(self):
+        #  apply default header row formatting
+        self.row_formatting.insert(0, SetRow(1,50,{'bold': True,'text_wrap': True, 'valign': 'top','border': 1}))
+
 @dataclass
 class FileProperties:
     title: str = None
@@ -315,7 +319,7 @@ def df_to_sheet_table(df: pd.DataFrame,
     cell_range = xw.utility.xl_range(0, 0, end_row, last_column)
 
     # create table
-    #df = df.reset_index()  # FIX
+    #df = df.reset_index()  # TODO
     header = [{'header': col} for col in df.columns.tolist()]
     if inject_header_params is not None:
         for h in header:
@@ -355,13 +359,17 @@ def df_to_sheet_table(df: pd.DataFrame,
     return worksheet
 
 @dataclass
-class SheetObj:
+class TableObj:
     df: pd.DataFrame
     sheet_name: str = 'sheet_name'
+    description: str = 'short description of the table. add more details to notes.'
+    notes: Dict = field(default_factory=dict)
+
+@dataclass
+class SheetObj(TableObj):
     xlsx_params: XlsxTable = XlsxTable()
     xlsx_exporter: Callable = df_to_sheet_table
-    description: str = 'short description of the table. more details to notes.'
-    notes: Dict = field(default_factory=dict)
+
 
 @dataclass
 class ToExcel:
