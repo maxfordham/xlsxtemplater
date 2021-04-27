@@ -360,6 +360,7 @@ class SheetObj:
     sheet_name: str = 'sheet_name'
     xlsx_params: XlsxTable = XlsxTable()
     xlsx_exporter: Callable = df_to_sheet_table
+    description: str = 'short description of the table. more details to notes.'
     notes: Dict = field(default_factory=dict)
 
 @dataclass
