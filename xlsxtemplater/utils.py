@@ -46,6 +46,8 @@ def jobno_fromdir(fdir):
     Code:
         re.findall("[J][0-9][0-9][0-9][0-9]", txt)
     '''
+    if not isinstance(fdir, str):
+        fdir = str(fdir)
     matches = re.findall("[J][0-9][0-9][0-9][0-9]", fdir)
     if len(matches) == 0:
         job_no = 'J4321'

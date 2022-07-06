@@ -113,9 +113,9 @@ def object_to_excel(toexcel: ToExcel, fpth: str, file_properties: FileProperties
 
 def to_excel(data_object,
              fpth,
-             file_properties=None: FileProperties,
-             openfile=True: bool,
-             make_readme=True: bool) -> str:
+             file_properties: FileProperties=None,
+             openfile: bool=True,
+             make_readme: bool=True) -> str:
     """
     function to output dataobject (list of dicts of dataframes and associated metadata)
     to excel in nicely formatted tables. 
