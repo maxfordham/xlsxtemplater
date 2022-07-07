@@ -114,7 +114,7 @@ def object_to_excel(toexcel: ToExcel, fpth: str, file_properties: FileProperties
 def to_excel(data_object,
              fpth,
              file_properties: FileProperties=None,
-             openfile: bool=True,
+             openfile: bool=False,
              make_readme: bool=True) -> str:
     """
     function to output dataobject (list of dicts of dataframes and associated metadata)
@@ -128,7 +128,7 @@ def to_excel(data_object,
         file_properties: FileProperties obj defining metadata
         openfile: bool
         make_readme: creates a readme header sheet. default to true. avoid changing unless
-            necessary as it is required for the from_excel command. 
+            necessary as it is required for the from_excel comm and. 
     
     Returns:
         fpth: of output excel file
