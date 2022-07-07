@@ -1,6 +1,6 @@
 from dataclasses import dataclass, asdict, field
 from typing import Optional, List, Dict, Callable
-from dacite import from_dict
+from dacite import from_dict # TODO: remove requirement for dacite
 import pandas as pd
 import xlsxwriter as xw
 
@@ -201,7 +201,7 @@ class XlsxTable:
 
     def __post_init__(self):
         #  apply default header row formatting
-        self.row_formatting.insert(0, SetRow(1,50,{'bold': True,'text_wrap': True, 'valign': 'top','border': 1}))
+        self.row_formatting.insert(0, SetRow(0,50,{'bold': True,'text_wrap': True, 'valign': 'top','border': 1}))
 
 @dataclass
 class FileProperties:

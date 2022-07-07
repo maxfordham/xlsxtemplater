@@ -9,7 +9,7 @@ import pandas as pd
 # mf packages 
 # TODO - remove this dedendency if opensource
 try:
-    from mf_file_utilities import applauncher_wrapper as aw
+    from mf_file_utilities.applauncher_wrapper import go as _open_file
 except:
     pass
 
@@ -23,8 +23,8 @@ def date():
 #  from mf_modules.file_operations import open_file
 def open_file(filename):
     """Open document with default application in Python."""
-    if sys.platform == 'linux' and str(type(aw))== "<class 'module'>":
-        aw.open_file(filename)
+    if sys.platform == 'linux':
+        _open_file(filename)
         #  note. this is an MF custom App for opening folders and files
         #        from a Linux file server on the local network
     else:
@@ -46,6 +46,8 @@ def jobno_fromdir(fdir):
     Code:
         re.findall("[J][0-9][0-9][0-9][0-9]", txt)
     '''
+    if not isinstance(fdir, str):
+        fdir = str(fdir)
     matches = re.findall("[J][0-9][0-9][0-9][0-9]", fdir)
     if len(matches) == 0:
         job_no = 'J4321'
