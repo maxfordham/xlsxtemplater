@@ -3,7 +3,7 @@ import os
 import copy
 import subprocess
 from dataclasses import asdict
-from xlsxtemplater.utils import open_file, jobno_fromdir, get_user, date
+from xlsxtemplater.utils import open_file, jobno_fromdir, get_user, date, modify_string
 from xlsxtemplater.templaterdefs import *
 
 
@@ -39,7 +39,7 @@ def create_readme(toexcel: ToExcel) -> SheetObj:
     readme = from_dict(data_class=SheetObj,data=di)
     return readme
 
-def create_sheet_objs(data_object, fpth) -> ToExcel:
+def create_sheet_objs(data_object, fpth, validate_sheet_name=True) -> ToExcel:
     '''
     pass a dataobject and return a ToExcel objects
     this function interprests the user input and tidies into the correct format.
@@ -86,7 +86,11 @@ def create_sheet_objs(data_object, fpth) -> ToExcel:
     if type(data_object) == dict:
         data_object = add_notes(data_object, fpth)
         lidi.append(data_object)
-
+    
+    if validate_sheet_name is not None:
+        for l in lidi: 
+            l['sheet_name'] = modify_string(l['sheet_name'], max_length=30)
+        
     sheets = [from_dict(data_class=SheetObj,data=l) for l in lidi] #  defaults are added here if not previously specified
     toexcel = ToExcel(sheets=sheets)
     return toexcel
