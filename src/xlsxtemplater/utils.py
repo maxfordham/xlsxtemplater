@@ -93,8 +93,9 @@ def modify_string(s,
                   remove_forbidden_chars=True, 
                   remove_spaces=True, 
                   fn_on_string=None,
-                  max_length=None,
-                  min_length=None):
+                  min_length=None,
+                  max_length=None
+                  ):
     """
     
     Reference:
@@ -110,7 +111,7 @@ def modify_string(s,
     if min_length is not None:
         if len(s) < min_length:
             s = s + "-"*(min_length-len(s))
-    if min_length is not None:
+    if max_length is not None:
         if len(s) > max_length:
             s = s[0:max_length]
     return s
