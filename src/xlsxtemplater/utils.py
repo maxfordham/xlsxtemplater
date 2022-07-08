@@ -93,7 +93,7 @@ def modify_string(s,
                   remove_forbidden_chars=True, 
                   remove_spaces=True, 
                   fn_on_string=None,
-                  max_length=None
+                  max_length=None,
                   min_length=None):
     """
     
