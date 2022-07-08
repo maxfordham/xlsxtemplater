@@ -92,7 +92,7 @@ def from_excel(fpth):
 
 def modify_string(s, 
                   remove_forbidden_chars=True, 
-                  remove_spaces=None, 
+                  replace_spaces=None, 
                   fn_on_string=None,
                   min_length=None,
                   max_length=None):
@@ -101,7 +101,7 @@ def modify_string(s,
     Reference:
         [naming-a-file](https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file)
     """
-    if remove_spaces is not None:
+    if replace_spaces is not None:
         s = s.replace(" ", replace_spaces)
     if remove_forbidden_chars:
         for c in FILENAME_FORBIDDEN_CHARACTERS:
@@ -115,4 +115,5 @@ def modify_string(s,
         if len(s) > max_length:
             s = s[0:max_length]
     return s
+
 
