@@ -89,9 +89,10 @@ def from_excel(fpth):
         li.append(tmp)
     return li
 
+
 def modify_string(s, 
                   remove_forbidden_chars=True, 
-                  replace_spaces=None, 
+                  remove_spaces=None, 
                   fn_on_string=None,
                   min_length=None,
                   max_length=None):
