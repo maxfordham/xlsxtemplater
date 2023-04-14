@@ -1,6 +1,5 @@
 from dataclasses import dataclass, asdict, field
 from typing import Optional, List, Dict, Callable
-from dacite import from_dict # TODO: remove requirement for dacite
 import pandas as pd
 import xlsxwriter as xw
 
