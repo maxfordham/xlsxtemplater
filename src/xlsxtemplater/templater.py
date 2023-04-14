@@ -112,7 +112,7 @@ def object_to_excel(toexcel: ToExcel, fpth: str, file_properties: FileProperties
         sheet.xlsx_exporter(sheet.df, writer, workbook, sheet.sheet_name, sheet.xlsx_params)
     workbook.set_properties(asdict(file_properties))
     # save and close the workbook
-    writer.save()
+    writer.close()
     return fpth
 
 def to_excel(data_object,
