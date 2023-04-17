@@ -5,7 +5,7 @@ import subprocess
 from dataclasses import asdict
 from xlsxtemplater.utils import open_file, jobno_fromdir, get_user, date, modify_string
 from xlsxtemplater.templaterdefs import *
-
+from dacite.core import from_dict
 
 def create_meta(fpth):
     di = {}
@@ -167,25 +167,3 @@ def to_excel(data_object,
     return fpth
 
 #  TODO: make to_json function that outputs the same data to a json file.
-
-if __name__ == '__main__':
-    if __debug__ == True:
-        fdir = os.path.join('test_data')
-        fpth = os.path.join(fdir,'bsDataDictionary_Psets.xlsx')
-        df = pd.read_excel(fpth)
-        #fpth = wdir + '\\' + 'bsDataDictionary_Psets-processed.xlsx'
-        #df1 = pd.read_excel(fpth,sheet_name='1_PropertySets')
-        di = {
-            'sheet_name': 'IfcProductDataTemplate',
-            'xlsx_exporter': df_to_sheet_table,
-            'xlsx_params': params_ifctemplate(),
-            'df': df,
-        }
-        li = [di]
-        fpth = os.path.join(fdir,'bsDataDictionary_Psets-out.xlsx') 
-        to_excel(li, fpth, openfile=False)
-        print('{} --> written to excel'.format(fpth))
-        from utils import from_excel
-        li = from_excel(fpth)
-        if type(li) is not None:
-            print('{} --> read from excel'.format(fpth))
