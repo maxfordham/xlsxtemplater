@@ -38,7 +38,8 @@ Issues = "https://github.com/maxfordham/xlsxtemplater/issues"
 Source = "https://github.com/maxfordham/xlsxtemplater"
 
 [tool.hatch.version]
-path = "src/xlsxtemplater/__about__.py"
+source = "vcs"
+version-file = "_version.py"
 
 [tool.hatch.envs.default]
 dependencies = ["pytest", "pytest-cov"]
