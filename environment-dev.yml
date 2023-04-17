@@ -1,0 +1,16 @@
+name: xlsxtemplater-dev
+# channels priority
+# see https://bioconda.github.io/
+# conda-forge has highest prioriy
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python
+  - pandas
+  - openpyxl
+  - xlsxwriter
+  - dataclasses
+  - dacite
+  - typing
+  - pytest

@@ -3,25 +3,41 @@
 """Tests for `xlsxtemplater` package."""
 
 
-import unittest
-import xlsxtemplater
-from xlsxtemplater import from_excel
+# import unittest
+from xlsxtemplater import from_excel, to_excel
+from xlsxtemplater.templater import df_to_sheet_table, params_ifctemplate
+import pandas as pd
+import pathlib
 
-class TestStringMethods(unittest.TestCase):
+fpth_in = pathlib.Path('test_data/bsDataDictionary_Psets.xlsx')
+fpth_out = fpth_in.parent / 'bsDataDictionary_Psets-out.xlsx'
+fpth_out.unlink(missing_ok=True)
+df = pd.read_excel(fpth_in)
 
-    def test_upper(self):
-        self.assertEqual('foo'.upper(), 'FOO')
 
-    def test_isupper(self):
-        self.assertTrue('FOO'.isupper())
-        self.assertFalse('Foo'.isupper())
+class TestXlsxTemplater:
 
-    def test_split(self):
-        s = 'hello world'
-        self.assertEqual(s.split(), ['hello', 'world'])
-        # check that s.split fails when the separator is not a string
-        with self.assertRaises(TypeError):
-            s.split(2)
+    def test_to_excel(self):
 
-if __name__ == '__main__':
-    unittest.main()
+        di = {
+            'sheet_name': 'IfcProductDataTemplate',
+            'xlsx_exporter': df_to_sheet_table,
+            'xlsx_params': params_ifctemplate(),
+            'df': df,
+        }
+        li = [di]
+        
+        to_excel(li, fpth_out, openfile=False)
+        assert fpth_out.is_file()
+
+    # TODO: fix this! 
+    def test_from_excel(self):
+        li = from_excel(fpth_in)
+        assert li is not None
+        assert list(li[0].keys()) ==  ["sheet_name",
+            "description",
+            "JobNo",
+            "Date",
+            "Author"]
+
+

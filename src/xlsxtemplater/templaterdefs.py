@@ -2,7 +2,7 @@ from dataclasses import dataclass, asdict, field
 from typing import Optional, List, Dict, Callable
 import pandas as pd
 import xlsxwriter as xw
-
+from dacite.core import from_dict
 #import xlsxtemplater
 from xlsxtemplater.utils import get_user
 from xlsxtemplater._version import get_versions
@@ -366,7 +366,7 @@ class TableObj:
 
 @dataclass
 class SheetObj(TableObj):
-    xlsx_params: XlsxTable = XlsxTable()
+    xlsx_params: XlsxTable = field(default_factory=lambda: XlsxTable())    
     xlsx_exporter: Callable = df_to_sheet_table
 
 
